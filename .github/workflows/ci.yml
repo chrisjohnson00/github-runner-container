@@ -46,6 +46,12 @@ jobs:
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
           echo "version=${VERSION//\//-}" >> $GITHUB_OUTPUT
           echo "push=${PUSH}" >> $GITHUB_OUTPUT
+      - id: runner-repo
+        uses: pozetroninc/github-action-get-latest-release@v0.7.0
+        with:
+          owner: actions
+          repo: runner
+          excludes: prerelease, draft
       - name: 'Setup Docker Buildx'
         uses: 'docker/setup-buildx-action@v2'
       - name: 'Cache Docker layers'
@@ -80,6 +86,8 @@ jobs:
             org.opencontainers.image.version=${{ steps.prep.outputs.version }}
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
+          build-args: |
+            RUNNER_VERSION=${{ steps.runner-repo.outputs.release }}
   actionslint:
     name: 'Actions Yaml Lint'
     runs-on: 'ubuntu-20.04'
