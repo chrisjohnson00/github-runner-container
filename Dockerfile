@@ -4,8 +4,7 @@ FROM ubuntu:22.04
 # set the github runner version
 ARG RUNNER_VERSION="v2.303.0"
 
-# install python and the packages the your code depends on along with jq so we can parse JSON
-# add additional packages as necessary
+# install python, and other build tools
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       curl \
