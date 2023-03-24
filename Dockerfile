@@ -12,10 +12,6 @@ RUN apt-get update && \
       build-essential \
       libssl-dev \
       libffi-dev \
-      python3 \
-      python3-venv \
-      python3-dev \
-      python3-pip \
       git
 
 # cd into the user directory, download and unzip the github actions runner
