@@ -21,3 +21,7 @@ docker run \
   --name runner \
   runner-image
 ```
+
+## Run in K8s
+
+See `kubernetes/deployment.yaml` as an example.  NOTE: Add any env vars/secrets at this point, or use GH secrets.
