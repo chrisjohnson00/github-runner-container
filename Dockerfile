@@ -13,7 +13,8 @@ RUN apt-get update && \
       libssl-dev \
       libffi-dev \
       ca-certificates \
-      git
+      git && \
+    rm -rf /var/lib/apt/lists/*
 
 # cd into the user directory, download and unzip the github actions runner
 RUN useradd -m docker && cd /home/docker && mkdir actions-runner && cd actions-runner && \
@@ -22,7 +23,9 @@ RUN useradd -m docker && cd /home/docker && mkdir actions-runner && cd actions-r
     rm actions-runner-linux-x64-${RUNNER_VERSION#v}.tar.gz
 
 # install some additional dependencies
-RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependencies.sh
+RUN chown -R docker ~docker && \
+    /home/docker/actions-runner/bin/installdependencies.sh && \
+    rm -rf /var/lib/apt/lists/*
 
 # copy over the start.sh script
 COPY start.sh start.sh
