@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-runner-python-api-sample
+  namespace: ci
+  labels:
+    app: github-runner-python-api-sample
+    version: v0.1.0-rc-4515957482.0 # {"$imagepolicy": "flux-system:github-runner:tag"}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: github-runner-python-api-sample
+  template:
+    metadata:
+      labels:
+        app: github-runner-python-api-sample
+        version: v0.1.0-rc-4515957482.0 # {"$imagepolicy": "flux-system:github-runner:tag"}
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - name: github-runner-python-api-sample
+        image: chrisjohnson00/github-runner:v0.1.0-rc-4515957482.0 # {"$imagepolicy": "flux-system:github-runner"}
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1024Mi
+          requests:
+            cpu: 10m
+            memory: 60Mi
+        env:
+        - name: ORGANIZATION
+          value: chrisjohnson00
+        - name: REPO
+          value: python-api-sample
+        - name: RUNNER_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: LABELS
+          value: "python-api-sample,openfaas"
+        envFrom:
+        - secretRef:
+            name: github-access-token
+        - secretRef:
+            name: openfaas-password
